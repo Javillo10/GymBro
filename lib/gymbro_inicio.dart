@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymbro/caja_elementos.dart';
+import 'package:gymbro/navbar.dart';
 import 'dart:ui';
 
 class GymbroInicio extends StatefulWidget {
@@ -10,6 +11,15 @@ class GymbroInicio extends StatefulWidget {
 }
 
 class _GymBroInicioState extends State<GymbroInicio> {
+  int _currentIndex = 1;
+
+  final List<NavBarItem> _items = [
+    NavBarItem(icon: Icons.bar_chart, label: "Progreso"),
+    NavBarItem(icon: Icons.home_rounded, label: "Home"),
+    NavBarItem(icon: Icons.list_alt, label: "Rutinas"),
+  ];
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,13 +101,12 @@ class _GymBroInicioState extends State<GymbroInicio> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(height: 6),
-                              const SizedBox(height: 5),
+                              const SizedBox(height: 11),
 
 
                               Card(
                                 elevation: 8,
-                                color: const Color(0xFF1A1A1A),
+                                color: const Color(0xFF2D4E4A),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
@@ -109,7 +118,7 @@ class _GymBroInicioState extends State<GymbroInicio> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: const [
                                         Text(
-                                          'Pierna / Glúteo',
+                                          'Espalda',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
@@ -132,18 +141,39 @@ class _GymBroInicioState extends State<GymbroInicio> {
                         ),
 
 
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 25),
 
                         // 📦 CARDS
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 22),
                           child: Wrap(
-                            spacing: 16,
+                            spacing: 22,
                             runSpacing: 16,
                             alignment: WrapAlignment.start, // 👈 CLAVE
                             children: [
-                              const BoxPlaceholder(color: Color(0xFF2D4E4A)),
-                              const BoxPlaceholder(color: Color(0xFF2D4E4A)),
+
+                              const Text(
+                                "Tus estadísticas semanales",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              const SizedBox(height: 11),
+
+                              SizedBox(
+                                width: 150,
+                                child:
+                                const InfoCard(title: "Repeticiones", value: "18", unit: "", icon: Icons.stacked_bar_chart_rounded, accentColor: const Color(0xFF2D4E4A)),
+                              ),
+
+                              SizedBox(
+                                width: 150,
+                                child:
+                                const InfoCard(title: "Peso", value: "430", unit: "kg", icon: Icons.monitor_weight, accentColor: const Color(0xFF2D4E4A)),
+                              ),
                             ],
                           ),
                         ),
@@ -157,6 +187,17 @@ class _GymBroInicioState extends State<GymbroInicio> {
             ),
           ),
         ],
+      ),
+
+
+      bottomNavigationBar: BottomGlowNavBar(
+        selectedIndex: _currentIndex,
+        items: _items,
+        onItemSelected: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
     );
   }
