@@ -22,7 +22,7 @@ class _BottomGlowNavBarState extends State<BottomGlowNavBar> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [

@@ -3,5 +3,5 @@ import 'package:gymbro/gymbro_app.dart';
 
 void main() {
 // 1
-  runApp(const ConversorApp());
+  runApp(const GymbroAppApp());
 }
