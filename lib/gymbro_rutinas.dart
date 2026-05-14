@@ -1,106 +1,69 @@
 import 'package:flutter/material.dart' hide AppBar;
+import 'package:provider/provider.dart';
+
 import 'card_ancho.dart';
 import 'gymbro_añadir_rutina.dart';
 import 'gymbro_pantalla_rutina.dart';
 import 'icono_barra.dart';
 import 'appbar.dart';
+import 'snackbar.dart';
 
 import '../models/rutina.dart';
-import '../services/carga_rutinas.dart';
+import '../models/lista_rutinas.dart';
 
-class PantallaRutinas extends StatefulWidget {
+class PantallaRutinas extends StatelessWidget {
   const PantallaRutinas({super.key});
 
-  @override
-  State<PantallaRutinas> createState() => _PantallaRutinaState();
-}
+  Future<void> _navegarYAnadir(BuildContext context) async {
+    final lista = Provider.of<ListaRutinas>(context, listen: false);
 
-class _PantallaRutinaState extends State<PantallaRutinas> {
-  final RutinaService rutinaService = RutinaService();
-
-  List<Rutina> misRutinas = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _cargarRutinas();
-  }
-
-  Future<void> _cargarRutinas() async {
-    final rutinas = await rutinaService.cargarRutinas();
-
-    setState(() {
-      misRutinas = rutinas;
-    });
-  }
-
-  void _navegarYAnadir() async {
     final String? nombreRecibido = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PantallaAnadirRutina()),
+      MaterialPageRoute(
+        builder: (context) => PantallaAnadirRutina(),
+      ),
     );
 
     if (nombreRecibido != null && nombreRecibido.isNotEmpty) {
       final nueva = Rutina(
         nombre: nombreRecibido,
-        ejercicios: "0 ejercicios",
       );
 
-      setState(() {
-        misRutinas.add(nueva);
-      });
+      await lista.anadir(nueva);
 
-      await rutinaService.guardarRutinas(misRutinas);
+      buildSnackBar(
+        context,
+        'Rutina añadida correctamente',
+        const Color(0xFF2D4E4A),
+        Icons.check_circle_outline,
+      );
     }
   }
 
-  void _borrarRutina(Rutina rutina) async {
-    setState(() {
-      misRutinas.remove(rutina);
-    });
 
-    await rutinaService.guardarRutinas(misRutinas);
-  }
+  Future<void> _borrarRutina(BuildContext context, Rutina rutina) async {
+    final lista = Provider.of<ListaRutinas>(context, listen: false);
 
-  void _mostrarSnackBar(String texto) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle, color: Color(0xFF2D4E4A)),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                texto,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
+    final index = lista.misRutinas.indexOf(rutina);
 
-        backgroundColor: const Color(0xFF1E2126),
+    await lista.borrar(rutina);
 
-        behavior: SnackBarBehavior.floating,
-
-        margin: const EdgeInsets.only(
-          left: 20,
-          right: 20,
-          bottom: 90, // 👈 separación de navbar
-        ),
-
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-
-        elevation: 10,
-
-        duration: const Duration(seconds: 2),
-      ),
+    buildSnackBar(
+      context,
+      'Rutina eliminada',
+      const Color(0xFF2D4E4A),
+      Icons.check_circle_outline,
+      actionLabel: 'DESHACER',
+      onAction: () {
+        lista.restaurar(rutina, index);
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final lista = Provider.of<ListaRutinas>(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFF121417),
       body: Stack(
@@ -137,7 +100,8 @@ class _PantallaRutinaState extends State<PantallaRutinas> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
                               "Rutinas",
@@ -149,7 +113,7 @@ class _PantallaRutinaState extends State<PantallaRutinas> {
                             ),
                             IconoBarra(
                               color: Colors.white,
-                              funcion: _navegarYAnadir,
+                              funcion: () => _navegarYAnadir(context),
                               icono: Icons.add,
                             ),
                           ],
@@ -159,43 +123,47 @@ class _PantallaRutinaState extends State<PantallaRutinas> {
                       const SizedBox(height: 15),
 
                       Expanded(
-                        child: misRutinas.isEmpty
+                        child: lista.misRutinas.isEmpty
                             ? const Center(
                           child: Text(
                             "No hay rutinas aún",
-                            style: TextStyle(color: Colors.white54),
+                            style:
+                            TextStyle(color: Colors.white54),
                           ),
                         )
                             : ListView.builder(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 20),
-                          itemCount: misRutinas.length,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20),
+                          itemCount: lista.misRutinas.length,
                           itemBuilder: (context, index) {
-                            final rutina = misRutinas[index];
+                            final rutina =
+                            lista.misRutinas[index];
 
                             return Padding(
-                              padding:
-                              const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.only(
+                                  bottom: 12),
                               child: Dismissible(
-                                key: Key('${rutina.nombre}_$index'),
-                                direction:
-                                DismissDirection.startToEnd,
+                                key: Key(
+                                    '${rutina.nombre}_$index'),
+                                direction: DismissDirection
+                                    .startToEnd,
 
-                                onDismissed: (direction) {
-                                  _borrarRutina(rutina);
-
-                                  _mostrarSnackBar(
-                                      'Rutina eliminada correctamente');
+                                onDismissed: (_) {
+                                  _borrarRutina(
+                                      context, rutina);
                                 },
 
                                 background: Container(
                                   padding:
-                                  const EdgeInsets.only(left: 20),
-                                  alignment: Alignment.centerLeft,
+                                  const EdgeInsets.only(
+                                      left: 20),
+                                  alignment:
+                                  Alignment.centerLeft,
                                   decoration: BoxDecoration(
                                     color: Colors.red,
                                     borderRadius:
-                                    BorderRadius.circular(12),
+                                    BorderRadius.circular(
+                                        12),
                                   ),
                                   child: const Icon(
                                     Icons.delete,
@@ -211,14 +179,19 @@ class _PantallaRutinaState extends State<PantallaRutinas> {
                                         builder: (context) =>
                                             PantallaDetalleRutina(
                                               rutina: rutina,
-                                              funcionBorrar: _borrarRutina,
+                                              funcionBorrar:
+                                                  (r) =>
+                                                  _borrarRutina(
+                                                      context,
+                                                      r),
                                             ),
                                       ),
                                     );
                                   },
                                   child: CardAncho(
-                                    Titulo: rutina.nombre,
-                                    subTitulo: rutina.ejercicios,
+                                    titulo: rutina.nombre,
+                                    subTituloIzquierda:
+                                    rutina.totalEjercicios,
                                     color: "1E2126",
                                   ),
                                 ),

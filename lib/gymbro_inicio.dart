@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide AppBar;
+import 'package:provider/provider.dart';
 import 'package:gymbro/caja_elementos.dart';
+import 'models/lista_rutinas.dart';
 import 'card_ancho.dart';
 import 'appbar.dart';
 import 'dart:ui';
@@ -30,11 +32,11 @@ class _GymBroInicioState extends State<GymbroInicio> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start, // 👈 IMPORTANTE
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
 
-                        // 📌 TEXTO
+                        //TEXTO
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
@@ -52,8 +54,7 @@ class _GymBroInicioState extends State<GymbroInicio> {
                               const SizedBox(height: 11),
 
 
-                              CardAncho(Titulo: "Espalda", subTitulo: "6 ejercicios", color: "2D4E4A",)
-
+                              _crearEntrenoDelDia(),
                             ],
                           ),
                         ),
@@ -61,13 +62,13 @@ class _GymBroInicioState extends State<GymbroInicio> {
 
                         const SizedBox(height: 25),
 
-                        // 📦 CARDS
+                        // CARDS
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 22),
                           child: Wrap(
                             spacing: 22,
                             runSpacing: 16,
-                            alignment: WrapAlignment.start, // 👈 CLAVE
+                            alignment: WrapAlignment.start,
                             children: [
 
                               const Text(
@@ -129,6 +130,20 @@ class _GymBroInicioState extends State<GymbroInicio> {
         ),
       ),
     );
+  }
+
+  Widget _crearEntrenoDelDia(){
+    final lista = Provider.of<ListaRutinas>(context, listen: false);
+
+    final rutina = lista.rutinaAleatoria();
+
+    if(rutina == null){
+      return CardAncho(titulo: "No hay rutinas guardadas", color: "2D4E4A",);
+    }else {
+      return CardAncho(titulo: rutina.nombre,
+        subTituloIzquierda: rutina.totalEjercicios,
+        color: "2D4E4A",);
+    }
   }
 
 
