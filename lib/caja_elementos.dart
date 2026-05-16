@@ -32,7 +32,6 @@ class InfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Cabecera: Icono y Título
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -48,7 +47,6 @@ class InfoCard extends StatelessWidget {
           ),
           //const Spacer(),
           const SizedBox(height: 10),
-          // Título de la métrica
           Text(
             title,
             style: const TextStyle(
@@ -57,7 +55,6 @@ class InfoCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          // Valor grande y unidad
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide AppBar;
 import 'package:provider/provider.dart';
 
 import 'card_ancho.dart';
-import 'gymbro_añadir_rutina.dart';
+import 'gymbro_anadir_rutina.dart';
 import 'gymbro_pantalla_rutina.dart';
 import 'icono_barra.dart';
 import 'appbar.dart';

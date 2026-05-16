@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'ejercicio.dart';
 
 class Rutina extends ChangeNotifier {
-  final String nombre;
+  String nombre;
   List<Ejercicio> _ejercicios = [];
 
   Rutina({required this.nombre, List<Ejercicio>? ejercicios})
@@ -28,6 +28,11 @@ class Rutina extends ChangeNotifier {
 
   void anadirEjercicio(Ejercicio ejercicio) {
     _ejercicios.add(ejercicio);
+    notifyListeners();
+  }
+
+  void actualizarNombre(String nuevoNombre) {
+    nombre = nuevoNombre;
     notifyListeners();
   }
 

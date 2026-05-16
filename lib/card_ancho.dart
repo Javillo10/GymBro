@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CardAncho extends StatelessWidget {
   final String titulo;
   final String? subTituloIzquierda;
+  final IconData? iconoIzquierda;
   final String? numero;
   final String? subTituloDerecha;
   final String color;
@@ -11,6 +12,7 @@ class CardAncho extends StatelessWidget {
     super.key,
     required this.titulo,
     this.subTituloIzquierda,
+    this.iconoIzquierda,
     this.numero,
     this.subTituloDerecha,
     required this.color,
@@ -21,9 +23,7 @@ class CardAncho extends StatelessWidget {
     return Card(
       elevation: 8,
       color: Color(int.parse("0xFF$color")),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: SizedBox(
         width: double.infinity,
         child: Padding(
@@ -44,14 +44,24 @@ class CardAncho extends StatelessWidget {
                       ),
                     ),
 
-                    if (subTituloIzquierda != null) ...[
+                    if (subTituloIzquierda != null ||
+                        iconoIzquierda != null) ...[
                       const SizedBox(height: 6),
-                      Text(
-                        subTituloIzquierda!,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 13,
-                        ),
+                      Row(
+                        children: [
+                          if (iconoIzquierda != null) ...[
+                            Icon(iconoIzquierda, color: Colors.grey, size: 14),
+                            const SizedBox(width: 4),
+                          ],
+                          if (subTituloIzquierda != null)
+                            Text(
+                              subTituloIzquierda!,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 13,
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ],
