@@ -8,7 +8,6 @@ void buildSnackBar(
       String? actionLabel,
       VoidCallback? onAction,
     }) {
-  // Oculta snackbar anterior (mejor UX)
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
   ScaffoldMessenger.of(context).showSnackBar(
@@ -44,7 +43,7 @@ void buildSnackBar(
 
       duration: const Duration(seconds: 3),
 
-      // 👇 BOTÓN OPCIONAL
+
       action: (actionLabel != null && onAction != null)
           ? SnackBarAction(
         label: actionLabel,

@@ -31,6 +31,20 @@ class Rutina extends ChangeNotifier {
     notifyListeners();
   }
 
+  void borrarEjercicio(int index) {
+    if (index >= 0 && index < _ejercicios.length) {
+      _ejercicios.removeAt(index);
+      notifyListeners();
+    }
+  }
+
+  void actualizarEjercicio(int index, Ejercicio ejercicioActualizado) {
+    if (index >= 0 && index < _ejercicios.length) {
+      _ejercicios[index] = ejercicioActualizado;
+      notifyListeners();
+    }
+  }
+
   void actualizarNombre(String nuevoNombre) {
     nombre = nuevoNombre;
     notifyListeners();

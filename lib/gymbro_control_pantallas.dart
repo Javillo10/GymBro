@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'gymbro_inicio.dart';
 import 'gymbro_rutinas.dart';
-import 'gymbro_progreso.dart';
-import 'navbar.dart';
+import 'elements/navbar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,13 +11,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 1;
-
-  final List<Widget> _pages = const [
-    PantallaProgreso(),
-    GymbroInicio(),
-    PantallaRutinas(),
-  ];
+  int _selectedIndex = 0;
+  final List<Widget> _pages = const [GymbroInicio(), PantallaRutinas()];
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         items: [
-          NavBarItem(icon: Icons.bar_chart, label: "Progreso"),
           NavBarItem(icon: Icons.home, label: "Home"),
           NavBarItem(icon: Icons.fitness_center, label: "Rutinas"),
         ],

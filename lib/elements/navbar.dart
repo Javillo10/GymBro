@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// --- WIDGET PRINCIPAL DE LA BARRA DE NAVEGACIÓN ---
+
 class BottomGlowNavBar extends StatefulWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemSelected;
@@ -26,22 +26,22 @@ class _BottomGlowNavBarState extends State<BottomGlowNavBar> {
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          // 1. EL EFECTO DE LUZ (GLOW) DETRÁS
+
           _buildGlowLayer(),
 
-          // 2. EL CONTENIDO DE LA BARRA (ICONOS Y TEXTOS)
+
           SafeArea(
             child: Container(
-              height: 70, // Altura total de la barra
+              height: 70,
               decoration: BoxDecoration(
-                color: Color(0xFF121417), // Color oscuro de fondo
-                borderRadius: BorderRadius.circular(16), // Bordes redondeados
+                color: Color(0xFF121417),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Stack(
                 children: [
-                  // Capa 1: Los iconos clicables
+
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 5), // Espacio para el indicador
+                    padding: const EdgeInsets.only(bottom: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: widget.items.asMap().entries.map((entry) {
@@ -51,7 +51,7 @@ class _BottomGlowNavBarState extends State<BottomGlowNavBar> {
 
                         return InkWell(
                           onTap: () => widget.onItemSelected(idx),
-                          splashColor: Colors.transparent, // Sin efecto de toque feo
+                          splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -76,7 +76,7 @@ class _BottomGlowNavBarState extends State<BottomGlowNavBar> {
                     ),
                   ),
 
-                  // Capa 2: EL INDICADOR DE COLOR Y GLOW ABAJO
+
                   Positioned(
                     bottom: 0,
                     left: 0,
@@ -92,10 +92,10 @@ class _BottomGlowNavBarState extends State<BottomGlowNavBar> {
     );
   }
 
-  // Capa de resplandor general que se extiende fuera de la barra
+
   Widget _buildGlowLayer() {
     return Positioned(
-      bottom: -30, // Posiciona la luz abajo
+      bottom: -30,
       left: 0,
       right: 0,
       child: Container(
@@ -104,7 +104,7 @@ class _BottomGlowNavBarState extends State<BottomGlowNavBar> {
           shape: BoxShape.circle,
           gradient: RadialGradient(
             colors: [
-              Color(0xFF2D4E4A).withOpacity(0.5), // Color de la luz
+              Color(0xFF2D4E4A).withOpacity(0.5),
               Colors.transparent,
             ],
           ),
@@ -113,41 +113,41 @@ class _BottomGlowNavBarState extends State<BottomGlowNavBar> {
     );
   }
 
-  // Fila que contiene el indicador de color específico para el elemento seleccionado
+
   Widget _buildIndicatorGlowRow() {
     return Container(
-      height: 4, // Grosor de la línea del indicador
+      height: 4,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: widget.items.asMap().entries.map((entry) {
           int idx = entry.key;
           bool isSelected = idx == widget.selectedIndex;
 
-          // Contenedor que solo muestra color y glow si está seleccionado
+
           return Expanded(
             child: isSelected
                 ? FractionallySizedBox(
-              widthFactor: 0.6, // Ancho de la línea de color (relativo al elemento)
+              widthFactor: 0.6,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFF2D4E4A), // Color de la línea (verde azulado brillante)
+                  color: Color(0xFF2D4E4A),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(2),
                     topRight: Radius.circular(2),
                   ),
                   boxShadow: [
-                    // Sombra que simula el GLOW del indicador de color
+
                     BoxShadow(
                       color: Color(0xFF2D4E4A).withOpacity(0.4),
                       blurRadius: 10,
                       spreadRadius: 1,
-                      offset: Offset(0, -2), // Glow hacia arriba
+                      offset: Offset(0, -2),
                     ),
                   ],
                 ),
               ),
             )
-                : SizedBox.shrink(), // Oculto si no está seleccionado
+                : SizedBox.shrink(),
           );
         }).toList(),
       ),
@@ -155,7 +155,7 @@ class _BottomGlowNavBarState extends State<BottomGlowNavBar> {
   }
 }
 
-// --- CLASE DE DATOS PARA LOS ELEMENTOS ---
+
 class NavBarItem {
   final IconData icon;
   final String label;

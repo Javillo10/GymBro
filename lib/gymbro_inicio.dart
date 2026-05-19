@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:provider/provider.dart';
-import 'package:gymbro/caja_elementos.dart';
+import 'package:gymbro/elements/caja_elementos.dart';
 import 'models/lista_rutinas.dart';
 import 'services/carga_entrenos.dart';
-import 'card_ancho.dart';
-import 'appbar.dart';
+import 'elements/card_ancho.dart';
+import 'elements/appbar.dart';
+import 'elements/efecto_luz.dart';
 
 class GymbroInicio extends StatefulWidget {
   const GymbroInicio({super.key});
@@ -14,15 +15,18 @@ class GymbroInicio extends StatefulWidget {
 }
 
 class _GymBroInicioState extends State<GymbroInicio> {
-  int _entrenosSemana = 0;
-  int _ejerciciosCompletadosSemana = 0;
+  int _entrenosSemana = 0;    //Variable para llevar el conteo de los entrenos de la semana
+  int _ejerciciosCompletadosSemana = 0;   //Variable para llevar el conteio de los ejercicios completados en la semanda
 
+
+  //:::::::::::::::::::::: INITSTATE() :::::::::::::::::
   @override
   void initState() {
     super.initState();
     _cargarEntrenos();
   }
 
+ //------------------------------------------------ DUDA -------------------------------
   Future<void> _cargarEntrenos() async {
     final entrenos = await cargarEntrenos();
 
@@ -45,19 +49,21 @@ class _GymBroInicioState extends State<GymbroInicio> {
     });
   }
 
+
+  //:::::::::::::::::::::::::::::::::::: BUILD DE LA PAGINA ::::::::::::::::::::::::::::::::::::::::::.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF121417),
       body: Stack(
         children: [
-          _crearEfectoLuz(),
+          EfectoLuz(),  //Constructor del widget del efecto de luz de arriba
 
           // 2. CONTENIDO DE LA APP
           SafeArea(
             child: Column(
               children: [
-                AppBar(),
+                AppBar(),   //Constructor de la appbar personalizada
 
                 // 3. CUERPO DE LA APP (Tus cajas)
                 Expanded(
@@ -73,8 +79,9 @@ class _GymBroInicioState extends State<GymbroInicio> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 10),
-                              const Text(
+                              const SizedBox(height: 10),    //Usado para la separación
+
+                              const Text(                     //↓ Configuración del texto que mostrará el entreno del dia ↓
                                 "Tu entreno de hoy es...",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -84,14 +91,13 @@ class _GymBroInicioState extends State<GymbroInicio> {
                               ),
                               const SizedBox(height: 11),
 
-                              _crearEntrenoDelDia(),
+                              _crearEntrenoDelDia(),  //Constructor del cajón con el entreno del día
                             ],
                           ),
                         ),
 
-                        const SizedBox(height: 25),
+                        const SizedBox(height: 25),   //Usado para la separación
 
-                        // CARDS
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 22),
                           child: Wrap(
@@ -99,7 +105,7 @@ class _GymBroInicioState extends State<GymbroInicio> {
                             runSpacing: 16,
                             alignment: WrapAlignment.start,
                             children: [
-                              const Text(
+                              const Text(                      //↓ Configuración del texto que mostrará las estadísticas ↓
                                 "Tus estadísticas semanales",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -110,26 +116,14 @@ class _GymBroInicioState extends State<GymbroInicio> {
 
                               const SizedBox(height: 11),
 
-                              SizedBox(
+                              SizedBox(   // ↓ Creamos el bloque de las estadísticas de los entrenos ↓
                                 width: 150,
-                                child: InfoCard(
-                                  title: "Entrenos",
-                                  value: "$_entrenosSemana",
-                                  unit: "",
-                                  icon: Icons.fitness_center,
-                                  accentColor: const Color(0xFF2D4E4A),
-                                ),
+                                child: InfoCard(title: "Entrenos", value: "$_entrenosSemana", unit: "", icon: Icons.fitness_center, accentColor: const Color(0xFF2D4E4A),),
                               ),
 
-                              SizedBox(
+                              SizedBox(   // ↓ Creamos el bloque de las estadísticas de los ejercicios completados ↓
                                 width: 150,
-                                child: InfoCard(
-                                  title: "Ejercicios",
-                                  value: "$_ejerciciosCompletadosSemana",
-                                  unit: "",
-                                  icon: Icons.check_circle_outline,
-                                  accentColor: const Color(0xFF2D4E4A),
-                                ),
+                                child: InfoCard(title: "Ejercicios", value: "$_ejerciciosCompletadosSemana", unit: "", icon: Icons.check_circle_outline, accentColor: const Color(0xFF2D4E4A),),
                               ),
                             ],
                           ),
@@ -148,39 +142,19 @@ class _GymBroInicioState extends State<GymbroInicio> {
     );
   }
 
-  Widget _crearEfectoLuz() {
-    return Positioned(
-      top: -150,
-      left: -50,
-      right: -50,
-      child: Container(
-        height: 400,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: RadialGradient(
-            colors: [
-              const Color(
-                0xFF2D4E4A,
-              ).withOpacity(0.5), // Color turquesa de la luz
-              const Color(0xFF121417).withOpacity(0.0), // Se funde con el fondo
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
+//:::::::::::::::::::::::::::::::::::::::: CREACIÓN DEL WIDGET ENTRENO DEL DÍA ::::::::::::::::::::::::::::
   Widget _crearEntrenoDelDia() {
-    final lista = Provider.of<ListaRutinas>(context, listen: false);
+    final listaRutinas = Provider.of<ListaRutinas>(context, listen: false);
 
-    final rutina = lista.rutinaAleatoria();
+    final rutinaEscogida = listaRutinas.rutinaAleatoria();
 
-    if (rutina == null) {
+    if (rutinaEscogida == null) {
       return CardAncho(titulo: "No hay rutinas guardadas", color: "2D4E4A");
     } else {
       return CardAncho(
-        titulo: rutina.nombre,
-        subTituloIzquierda: rutina.totalEjercicios,
+        titulo: rutinaEscogida.nombre,
+        subTituloIzquierda: rutinaEscogida.totalEjercicios,
         color: "2D4E4A",
       );
     }

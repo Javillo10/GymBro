@@ -6,7 +6,7 @@ class InfoCard extends StatelessWidget {
   final String unit;
   final IconData icon;
   final Color accentColor;
-  final String trend; // Ejemplo: "+10%" o "En progreso"
+  final String trend;
 
   const InfoCard({
     super.key,
@@ -25,9 +25,9 @@ class InfoCard extends StatelessWidget {
       height: 160,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E2126), // Fondo oscuro constante
+        color: const Color(0xFF1E2126),
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.white.withOpacity(0.05)), // Borde sutil
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

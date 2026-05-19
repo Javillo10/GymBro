@@ -3,11 +3,12 @@ import 'package:provider/provider.dart';
 
 import 'models/rutina.dart';
 import 'models/lista_rutinas.dart';
-import 'icono_barra.dart';
+import 'elements/icono_barra.dart';
 import 'gymbro_anadir_ejercicio.dart';
+import 'gymbro_editar_ejercicio.dart';
 import 'gymbro_editar_rutina.dart';
 import 'gymbro_entreno.dart';
-import 'card_ancho.dart';
+import 'elements/card_ancho.dart';
 
 class PantallaDetalleRutina extends StatelessWidget {
   final Rutina rutina;
@@ -19,6 +20,8 @@ class PantallaDetalleRutina extends StatelessWidget {
     required this.funcionBorrar,
   });
 
+
+//:::::::::::::::::::::::::::::::::::: BUILD DE LA PAGINA ::::::::::::::::::::::::::::::::::::::::::.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -83,14 +86,76 @@ class PantallaDetalleRutina extends StatelessWidget {
 
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 12),
-                                child: CardAncho(
-                                  titulo: ejercicio.nombre,
-                                  subTituloIzquierda:
-                                      ejercicio.grupoMuscular.nombre,
-                                  iconoIzquierda: ejercicio.grupoMuscular.icono,
-                                  numero: "${ejercicio.series}",
-                                  subTituloDerecha: "series",
-                                  color: "1E2126",
+                                child: Dismissible(
+                                  key: Key('ejercicio_$index'),
+                                  direction: DismissDirection.horizontal,
+                                  confirmDismiss: (direction) async {
+                                    if (direction ==
+                                        DismissDirection.startToEnd) {
+                                      rutina.borrarEjercicio(index);
+                                      Provider.of<ListaRutinas>(
+                                        context,
+                                        listen: false,
+                                      ).guardar();
+                                      return false;
+                                    } else {
+                                      final ejercicioEditado =
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PantallaEditarEjercicio(
+                                                    ejercicio: ejercicio,
+                                                  ),
+                                            ),
+                                          );
+                                      if (ejercicioEditado != null) {
+                                        rutina.actualizarEjercicio(
+                                          index,
+                                          ejercicioEditado,
+                                        );
+                                        Provider.of<ListaRutinas>(
+                                          context,
+                                          listen: false,
+                                        ).guardar();
+                                      }
+                                      return false;
+                                    }
+                                  },
+                                  background: Container(
+                                    alignment: Alignment.centerLeft,
+                                    padding: const EdgeInsets.only(left: 20),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: const Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  secondaryBackground: Container(
+                                    alignment: Alignment.centerRight,
+                                    padding: const EdgeInsets.only(right: 20),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF2D4E4A),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  child: CardAncho(
+                                    titulo: ejercicio.nombre,
+                                    subTituloIzquierda:
+                                        ejercicio.grupoMuscular.nombre,
+                                    iconoIzquierda:
+                                        ejercicio.grupoMuscular.icono,
+                                    numero: "${ejercicio.series}",
+                                    subTituloDerecha: "series",
+                                    color: "1E2126",
+                                  ),
                                 ),
                               );
                             },

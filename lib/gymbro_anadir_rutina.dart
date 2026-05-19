@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 class PantallaAnadirRutina extends StatelessWidget {
   PantallaAnadirRutina({super.key});
 
-  final TextEditingController _controller =
-  TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
-  InputDecoration _inputDecoration(String hint) {
+  InputDecoration _inputDecoration(String hint) {   // ↓ Configuración del campo de texto
     return InputDecoration(
       hintText: hint,
       hintStyle: const TextStyle(
@@ -53,7 +52,6 @@ class PantallaAnadirRutina extends StatelessWidget {
 
         child: Column(
           children: [
-            // 📌 INPUT
             TextField(
               controller: _controller,
 
@@ -68,7 +66,6 @@ class PantallaAnadirRutina extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // 📌 BOTÓN
             SizedBox(
               width: double.infinity,
 

@@ -17,14 +17,13 @@ class ListaRutinas extends ChangeNotifier {
 
   void cargarRutina(Rutina rutina) {
     rutina.addListener(() {
-      guardar(); // 👈 se guarda todo cuando una rutina cambia
+      guardar();
     });
   }
 
   Future<void> cargar() async {
     _misRutinas = await cargarRutinas();
 
-    // 👇 IMPORTANTE: escuchar cada rutina
     for (final r in _misRutinas) {
       cargarRutina(r);
     }
@@ -34,7 +33,7 @@ class ListaRutinas extends ChangeNotifier {
 
   Future<void> anadir(Rutina rutina) async {
     _misRutinas.add(rutina);
-    cargarRutina(rutina); // 👈 clave
+    cargarRutina(rutina);
     await guardar();
     notifyListeners();
   }

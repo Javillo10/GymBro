@@ -16,6 +16,7 @@ class PantallaEditarRutina extends StatefulWidget {
 class _PantallaEditarRutinaState extends State<PantallaEditarRutina> {
   late TextEditingController _controller;
 
+//:::::::::::::::::::::: INITSTATE() :::::::::::::::::
   @override
   void initState() {
     super.initState();
@@ -28,7 +29,7 @@ class _PantallaEditarRutinaState extends State<PantallaEditarRutina> {
     super.dispose();
   }
 
-  InputDecoration _inputDecoration(String hint) {
+  InputDecoration _inputDecoration(String hint) {   // ↓ Configuro el campo donde introduzco el texto
     return InputDecoration(
       hintText: hint,
       hintStyle: const TextStyle(color: Colors.white54),
@@ -46,6 +47,8 @@ class _PantallaEditarRutinaState extends State<PantallaEditarRutina> {
     );
   }
 
+
+//:::::::::::::::::::::::::::::::::::: BUILD DE LA PAGINA ::::::::::::::::::::::::::::::::::::::::::.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
