@@ -100,12 +100,10 @@ class _GymBroInicioState extends State<GymbroInicio> {
 
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 22),
-                          child: Wrap(
-                            spacing: 22,
-                            runSpacing: 16,
-                            alignment: WrapAlignment.start,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(                      //↓ Configuración del texto que mostrará las estadísticas ↓
+                              const Text(
                                 "Tus estadísticas semanales",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -113,17 +111,20 @@ class _GymBroInicioState extends State<GymbroInicio> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-
                               const SizedBox(height: 11),
-
-                              SizedBox(   // ↓ Creamos el bloque de las estadísticas de los entrenos ↓
-                                width: 150,
-                                child: InfoCard(title: "Entrenos", value: "$_entrenosSemana", unit: "", icon: Icons.fitness_center, accentColor: const Color(0xFF2D4E4A),),
-                              ),
-
-                              SizedBox(   // ↓ Creamos el bloque de las estadísticas de los ejercicios completados ↓
-                                width: 150,
-                                child: InfoCard(title: "Ejercicios", value: "$_ejerciciosCompletadosSemana", unit: "", icon: Icons.check_circle_outline, accentColor: const Color(0xFF2D4E4A),),
+                              Wrap(
+                                spacing: 22,
+                                runSpacing: 16,
+                                children: [
+                                  SizedBox(
+                                    width: 150,
+                                    child: InfoCard(title: "Entrenos", value: "$_entrenosSemana", unit: "", icon: Icons.fitness_center, accentColor: const Color(0xFF2D4E4A),),
+                                  ),
+                                  SizedBox(
+                                    width: 150,
+                                    child: InfoCard(title: "Ejercicios", value: "$_ejerciciosCompletadosSemana", unit: "", icon: Icons.check_circle_outline, accentColor: const Color(0xFF2D4E4A),),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
